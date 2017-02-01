@@ -1,7 +1,7 @@
 # svi
 Simple Vi like text editor
 
-This is an extention of [mvi](https://github.com/byllgrim/mvi).
+This is an extension of [mvi](https://github.com/byllgrim/mvi).
 For more information see the readme of mvi.
 
 ## Commands
