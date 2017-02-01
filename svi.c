@@ -178,6 +178,14 @@ runnormal(void)
 	case ':':
 		runcommand();
 		break;
+	case 'A':
+		cur.o = cur.l->l;
+		mode = INSERT;
+		break;
+	case 'I':
+		cur.o = 0;
+		mode = INSERT;
+		break;
 	case 'h':
 		moveleft();
 		break;
