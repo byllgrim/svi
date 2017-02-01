@@ -2,6 +2,7 @@
 Simple Vi like text editor
 
 This is an extention of [mvi](https://github.com/byllgrim/mvi).
+For more information see the readme of mvi.
 
 ## Commands
 
@@ -14,3 +15,7 @@ This is an extention of [mvi](https://github.com/byllgrim/mvi).
     h,j,k,l   - left, down, up, right
     i         - insert mode
     ESC       - normal mode
+
+## Dependencies
+* ncursesw
+* [libutf](http://git.suckless.org/libutf/)
