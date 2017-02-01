@@ -6,6 +6,7 @@ For more information see the readme of mvi.
 
 ## Commands
 
+    :[num]    - move to line num
     :d        - delete line
     :q        - quit
     :q!       - force quit

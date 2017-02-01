@@ -59,6 +59,7 @@ static void moveleft(void);
 static void moveright(void);
 static void moveup(void);
 static void movedown(void);
+static void gotoline(long int n);
 static size_t prevutfsize(char *s, int o);
 static size_t lflen(char *s); /* length til first \n */
 static void setstatus(char *fmt, ...);
@@ -174,7 +175,7 @@ runinsert(void)
 void
 runnormal(void)
 {
-	switch(getchar()) {
+	switch (getchar()) {
 	case ':':
 		runcommand();
 		break;
@@ -250,6 +251,9 @@ exec(char *cmd)
 	} else if (cmd[0] == 'd') {
 		cur = deleteline(cur);
 		unsaved = 1;
+	} else if (isdigit(cmd[0])) {
+		gotoline(atol(cmd));
+		/* TODO get a real parser */
 	}
 }
 
@@ -288,13 +292,13 @@ calcdrw(Position p)
 	Line *l;
 	size_t rows, taillen;
 
-	if (cur.l == p.l) {
-		p.o = 0;
-		return p;
-	} else if (cur.l == p.l->p) {
-		p.l = p.l->p;
-		p.o = 0;
-		return p;
+	/* TODO is this an inefficient algorithm? */
+	for (l = fstln; l != p.l; l = l->n) {
+		if (l == cur.l) {
+			p.l = cur.l;
+			p.o = 0;
+			return p;
+		}
 	}
 
 	for (l = p.l, rows = 0; l && l->p != cur.l; l = l->n)
@@ -517,6 +521,19 @@ movedown(void)
 	cur.o = calcoffset(cur.l->n->s, pos);
 
 	cur.l = cur.l->n;
+}
+
+void
+gotoline(long int n)
+{
+	size_t i;
+
+	if (n <= 0)
+		return; /* TODO setstatus? */
+
+	cur.l = fstln;
+	for (i = 1; i < (size_t)n && cur.l->n; i++)
+		cur.l = cur.l->n;
 }
 
 size_t
