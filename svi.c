@@ -375,6 +375,7 @@ insertstr(Position p, char *src)
 {
 	size_t inslen;
 	char *ins;
+	Position np;
 
 	inslen = lflen(src);
 	if (p.l->l + inslen >= LINSIZ*p.l->m) {
@@ -390,11 +391,15 @@ insertstr(Position p, char *src)
 	p.l->v += calcvlen(src, inslen);
 
 	if (inslen < strlen(src)) {
-		p.l = newline(p.l, p.l->n);
-		p.o = 0;
-		p = insertstr(p, src + inslen + 1);
-		insertstr(p, ins + inslen);
+		np.l = newline(p.l, p.l->n);
+		np.o = 0;
+		np = insertstr(np, src + inslen + 1);
+		insertstr(np, ins + inslen);
+
 		ins[inslen] = '\0';
+		p.l->l = strlen(p.l->s);
+		p.l->v = calcvlen(p.l->s, p.l->l);
+		return np;
 	}
 
 	return p;
