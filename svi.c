@@ -289,15 +289,16 @@ searchdown()
 {
 	Position p;
 	char *match;
+	size_t o;
 
 	if (!searchterm[0]) {
 		setstatus("no search term");
 		return;
 	}
 
-	p = cur;
-	for (; p.l && p.l->s; p.l = p.l->n, p.o = 0) {
-		if ((match = strstr(p.l->s + p.o + 1, searchterm))) {
+	for (p = cur; p.l && p.l->s; p.l = p.l->n) {
+		(p.l == cur.l) ? (o = p.o + 1) : (o = 0);
+		if ((match = strstr(p.l->s + o, searchterm))) {
 			cur.l = p.l;
 			cur.o = match - p.l->s;
 			return;
