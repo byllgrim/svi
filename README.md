@@ -6,6 +6,7 @@ For more information see the readme of mvi.
 
 ## Commands
 
+    /[term]   - search for term
     :[num]    - move to line num
     :d        - delete line
     :q        - quit
@@ -15,6 +16,7 @@ For more information see the readme of mvi.
     I         - insert at start of line
     h,j,k,l   - left, down, up, right
     i         - insert mode
+    n         - search downwards
     ESC       - normal mode
 
 ## Dependencies

@@ -43,8 +43,11 @@ static void init(void);
 static void cleanup(void);
 static void runinsert(void);
 static void runnormal(void);
-static void runcommand(void);
+static void runcommand(char c);
 static void exec(char *cmd);
+static void search(char *cmd); /* TODO rename find? */
+static void setsearch(char *cmd); /* TODO rename parameter? */
+static void searchdown();
 static void draw(void);
 static Position calcdrw(Position p);
 static size_t calcvlen(char *str, size_t o);
@@ -74,6 +77,7 @@ static Line *fstln;
 static int mode = NORMAL;
 static char *status = NULL;
 static char *filename = NULL;
+static char *searchterm = NULL;
 
 /* function definitions */
 void
@@ -137,6 +141,7 @@ init(void)
 	cur.l = drw.l = fstln = newline(NULL, NULL);
 	status = ecalloc(LINSIZ + 1, sizeof(char));
 	filename = ecalloc(LINSIZ + 1, sizeof(char));
+	searchterm = ecalloc(LINSIZ + 1, sizeof(char));
 }
 void
 cleanup(void)
@@ -147,6 +152,7 @@ cleanup(void)
 
 	free(status);
 	free(filename);
+	free(searchterm);
 	for (l = fstln; l; l = n) {
 		n = l->n;
 		free(l->s);
@@ -176,8 +182,11 @@ void
 runnormal(void)
 {
 	switch (getch()) {
+	case '/':
+		runcommand('/');
+		break;
 	case ':':
-		runcommand();
+		runcommand(':');
 		break;
 	case 'A':
 		cur.o = cur.l->l;
@@ -202,25 +211,30 @@ runnormal(void)
 	case 'l':
 		moveright();
 		break;
+	case 'n':
+		searchdown();
+		break;
+	/* TODO default */
 	}
 }
 
 void
-runcommand(void)
+runcommand(char c)
 {
 	char *cmd;
 	size_t i;
 
 	cmd = ecalloc(LINSIZ, sizeof(char));
 
-	setstatus(":");
+	setstatus("%c", c);
 	printstatus();
 	refresh();
 
 	for (i = 0; (cmd[i] = getch()); i++) {
 		if (cmd[i] == '\n' || cmd[i] == '\r') {
 			cmd[i] = '\0';
-			exec(cmd);
+			if (c == ':') exec(cmd);
+			else if (c == '/') search(cmd);
 			break;
 		} else if (ISESC(cmd[i])) {
 			break;
@@ -255,6 +269,42 @@ exec(char *cmd)
 		gotoline(atol(cmd));
 		/* TODO get a real parser */
 	}
+}
+
+void
+search(char *cmd)
+{
+	setsearch(cmd);
+	searchdown();
+}
+
+void
+setsearch(char *cmd)
+{
+	strncpy(searchterm, cmd, LINSIZ);
+}
+
+void
+searchdown()
+{
+	Position p;
+	char *match;
+
+	if (!searchterm[0]) {
+		setstatus("no search term");
+		return;
+	}
+
+	p = cur;
+	for (; p.l && p.l->s; p.l = p.l->n, p.o = 0) {
+		if ((match = strstr(p.l->s + p.o + 1, searchterm))) {
+			cur.l = p.l;
+			cur.o = match - p.l->s;
+			return;
+		}
+	}
+
+	setstatus("search found nothing"); /* TODO better message */
 }
 
 void
