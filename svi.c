@@ -100,7 +100,7 @@ loadfile(char *name)
 		memset(buf, 0, n);
 	}
 
-	if (p.l->s[0] == '\0')
+	if (p.l->s[0] == '\0' && p.l != fstln)
 		freeline(p.l);
 
 	strncpy(filename, name, LINSIZ);
