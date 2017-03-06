@@ -590,6 +590,8 @@ gotoline(long int n)
 	cur.l = fstln;
 	for (i = 1; i < (size_t)n && cur.l->n; i++)
 		cur.l = cur.l->n;
+
+	cur.o = 0;
 }
 
 size_t
