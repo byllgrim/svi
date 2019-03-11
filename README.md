@@ -21,4 +21,5 @@ For more information see the readme of mvi.
 
 ## Dependencies
 * ncursesw
-* [libutf](http://git.suckless.org/libutf/)
+* libutf - http://git.suckless.org/libutf/
+  * Updated link - git://git.suckless.org/sbase
