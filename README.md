@@ -25,4 +25,4 @@ For more information see the readme of mvi.
 * ncursesw
 * libutf - http://git.suckless.org/libutf/
   * Updated link - git://git.suckless.org/sbase
-  * Alternative - git@github.com:byllgrim/svi.git
+  * Alternative - https://github.com/cls/libutf
