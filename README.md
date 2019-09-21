@@ -1,4 +1,5 @@
 # svi
+
 Simple Vi like text editor
 
 This is an extension of [mvi](https://github.com/byllgrim/mvi).
@@ -20,6 +21,8 @@ For more information see the readme of mvi.
     ESC       - normal mode
 
 ## Dependencies
+
 * ncursesw
 * libutf - http://git.suckless.org/libutf/
   * Updated link - git://git.suckless.org/sbase
+  * Alternative - git@github.com:byllgrim/svi.git
